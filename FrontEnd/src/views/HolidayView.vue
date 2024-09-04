@@ -74,7 +74,7 @@ import { onMounted, ref, watch } from 'vue'
 const holidayDates: { [key: string]: string } = {
   'Tết nguyên đán (1/1 âm lịch)': '2025-01-29',
   'Giáng sinh (25/12)': '2024-12-25',
-  'Quốc khánh (2/9)': '2024-09-02',
+  'Quốc khánh (2/9)': '2025-09-02',
   'Ngày thống nhất (30/4)': '2025-04-30',
   'Valentine (14/2)': '2025-02-14',
   'Valentine trắng (14/3)': '2025-03-14',

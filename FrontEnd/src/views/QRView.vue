@@ -22,7 +22,7 @@
 
         <v-sheet class="mb-3">Số tiền</v-sheet>
         <v-text-field
-          hint="For example: Stylist Thief Slayer"
+          hint="For example: 100.000.000"
           label="Số tiền"
           density="compact"
           variant="outlined"

@@ -26,7 +26,7 @@
           density="compact"
         />
         <v-sheet>Translated Text</v-sheet>
-        <div style="background: rgb(239, 239, 239); min-height: 135px">
+        <div style="background: blue; min-height: 155px; padding-top: 20px; padding-left: 20px">
           <p v-if="isLoading">. . .</p>
           <p v-if="!isLoading && result">{{ result }}</p>
         </div>

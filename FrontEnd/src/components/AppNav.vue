@@ -1,5 +1,10 @@
 <template>
-  <v-app-bar color="grey" class="mx-auto" max-width="448">
+  <v-app-bar
+    color="black"
+    image="https://www.shutterstock.com/image-photo/space-background-explosion-supernova-bright-260nw-2299851537.jpg"
+    class="mx-auto"
+    max-width="448"
+  >
     <template v-slot:image>
       <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
     </template>
@@ -15,9 +20,7 @@
 
     <v-app-bar-title class="w-screen"><content-scrolling /></v-app-bar-title>
 
-    <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
+    <v-btn @click="toggleTheme" icon><v-icon>mdi-theme-light-dark</v-icon></v-btn>
 
     <v-btn icon>
       <v-icon>mdi-heart</v-icon>
@@ -30,6 +33,8 @@
 </template>
 
 <script setup lang="ts">
+import { useTheme } from 'vuetify'
+
 import { House } from 'lucide-vue-next'
 import ContentScrolling from './ContentScrolling.vue'
 import { useRouter } from 'vue-router'
@@ -48,4 +53,10 @@ const items = [
     href: 'breadcrumbs_link_1'
   }
 ]
+
+const theme = useTheme()
+
+function toggleTheme() {
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+}
 </script>

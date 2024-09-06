@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto w-screen mt-5" width="600" :elevation="8">
+  <v-card class="mx-auto w-screen mt-16" width="600" :elevation="8">
     <v-container>
       <v-select
         label="Select"
@@ -19,7 +19,7 @@
             :elevation="5"
           >
             <div class="text-center font-weight-bold text-h2 mt-3">{{ days }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">Days</div>
+            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Days') }}</div>
           </v-card>
         </v-col> </v-hover
       ><v-hover v-slot="{ isHovering, props }">
@@ -30,7 +30,7 @@
             :elevation="5"
           >
             <div class="text-center font-weight-bold text-h2 mt-3">{{ hours }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">Hours</div>
+            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Hours') }}</div>
           </v-card>
         </v-col> </v-hover
       ><v-hover v-slot="{ isHovering, props }">
@@ -41,7 +41,7 @@
             :elevation="5"
           >
             <div class="text-center font-weight-bold text-h2 mt-3">{{ minutes }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">Minutes</div>
+            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Minutes') }}</div>
           </v-card>
         </v-col>
       </v-hover>
@@ -53,22 +53,25 @@
             :elevation="5"
           >
             <div class="text-center font-weight-bold text-h2 mt-3">{{ seconds }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">Seconds</div>
+            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Seconds') }}</div>
           </v-card>
         </v-col>
       </v-hover>
     </v-row>
     <v-sheet class="text-center font-weight-bold text-h5"
-      >Sự kiện đã chọn: {{ selectedHoliday }}</v-sheet
+      >{{ t('SelectedDate') }}: {{ selectedHoliday }}</v-sheet
     >
     <v-sheet class="text-center text-disabled text-h6 mb-10"
-      >Ngày: {{ selectedHolidayDate }}</v-sheet
+      >{{ t('Date') }}: {{ selectedHolidayDate }}</v-sheet
     >
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 // Map holidays to their corresponding dates (ensure dates are in YYYY-MM-DD format)
 const holidayDates: { [key: string]: string } = {

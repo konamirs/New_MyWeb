@@ -1,14 +1,11 @@
 <template>
   <v-app-bar
-    color="black"
-    image="https://www.shutterstock.com/image-photo/space-background-explosion-supernova-bright-260nw-2299851537.jpg"
+    color="transparent"
+    :style="{ opacity: scrolled ? 0.5 : 1 }"
     class="mx-auto"
     max-width="448"
+    :elevation="6"
   >
-    <template v-slot:image>
-      <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
-    </template>
-
     <v-breadcrumbs :items="items">
       <template v-slot:divider>
         <v-app-bar-nav-icon
@@ -23,7 +20,7 @@
     <v-btn @click="toggleTheme" icon><v-icon>mdi-theme-light-dark</v-icon></v-btn>
 
     <v-btn icon>
-      <v-icon>mdi-heart</v-icon>
+      <v-btn @click="toggleLanguage">{{ locale === 'en' ? 'EN' : 'VN' }}</v-btn>
     </v-btn>
 
     <v-btn icon>
@@ -37,26 +34,57 @@ import { useTheme } from 'vuetify'
 
 import { House } from 'lucide-vue-next'
 import ContentScrolling from './ContentScrolling.vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useScroll } from './useScroll'
+import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
 const router = useRouter()
+const route = useRoute()
 const changeHome = () => router.push('/')
-const items = [
+
+function generateTitleFromPath(path: string): string {
+  const parts = path.split('/').filter((part) => part)
+  if (parts.length) {
+    const title = parts[parts.length - 1].replace(/-/g, ' ')
+    return title.charAt(0).toUpperCase() + title.slice(1)
+  } else {
+    return 'Quote'
+  }
+}
+
+const items = ref([
   {
     title: '',
-    disabled: true,
-    href: 'breadcrumbs_dashboard'
+    disabled: false,
+    href: '/'
   },
   {
-    title: 'Link 1',
+    title: generateTitleFromPath(route.path),
     disabled: true,
-    href: 'breadcrumbs_link_1'
+    href: route.path
   }
-]
+])
+
+// Watch for route changes and update the breadcrumbs accordingly
+watch(
+  () => route.path,
+  (newPath) => {
+    items.value[1].title = generateTitleFromPath(newPath)
+    items.value[1].href = newPath
+  }
+)
 
 const theme = useTheme()
 
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
+
+const toggleLanguage = () => {
+  locale.value = locale.value === 'en' ? 'vi' : 'en'
+}
+
+const scrolled = useScroll()
 </script>

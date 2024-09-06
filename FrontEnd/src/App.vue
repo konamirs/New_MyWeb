@@ -1,5 +1,6 @@
 <template>
   <v-layout>
+    <div v-if="useTheme().global.current.value.dark" class="background"></div>
     <v-navigation-drawer rail expand-on-hover>
       <v-list density="default" nav>
         <v-list-item
@@ -64,6 +65,7 @@
 import { CalendarClock, Languages, Quote, Smile, Cat, QrCode } from 'lucide-vue-next'
 import AppNav from './components/AppNav.vue'
 import { useRouter } from 'vue-router'
+import { useTheme } from 'vuetify/lib/framework.mjs'
 
 const router = useRouter()
 const changeHome = () => router.push('/')
@@ -73,3 +75,18 @@ const changeHoliday = () => router.push('/holiday')
 const changeTranslate = () => router.push('/translate')
 const changeQr = () => router.push('/vietqr')
 </script>
+
+<style scoped>
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: url('https://static.vecteezy.com/system/resources/previews/008/420/223/original/horizontal-space-background-with-abstract-shape-and-stars-web-design-space-exploring-illustration-of-galaxy-concept-of-web-banner-vector.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: -1;
+}
+</style>

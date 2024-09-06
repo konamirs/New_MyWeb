@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto w-screen mt-5" color="#87918a" width="600">
+  <v-card class="mx-auto w-screen mt-16" color="#444" width="600">
     <v-card class="mx-3 my-3">
       <v-card-text>
         {{ t('quote') }}
@@ -23,18 +23,15 @@
     <v-row justify="center" class="mt-2 mb-4">
       <v-btn @click="GetQuote">{{ t('randomQuote') }}</v-btn>
     </v-row>
-    <v-btn @click="toggleLanguage">{{
-      locale === 'en' ? 'Switch to Vietnamese' : 'Switch to English'
-    }}</v-btn>
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import axios from 'axios'
+import { useI18n } from 'vue-i18n'
 
-const { locale, t } = useI18n()
+const { t } = useI18n()
 
 const ApiKey = 'zyCZHrqXSvEkXTorn4iCbw==qUnHnF2P6vJ7EDl5'
 const author = ref('')
@@ -92,6 +89,7 @@ const GetQuote = async () => {
     'movies',
     'success'
   ][Math.floor(Math.random() * 45)]
+
   const response = await fetch(`https://api.api-ninjas.com/v1/quotes?category=${randomCategory}`, {
     headers: { 'X-Api-Key': ApiKey }
   })
@@ -115,11 +113,6 @@ const translateQuote = async () => {
   } catch (error) {
     console.error('Translation error:', error)
   }
-}
-
-const toggleLanguage = () => {
-  locale.value = locale.value === 'en' ? 'vi' : 'en'
-  translateQuote()
 }
 
 onMounted(GetQuote)

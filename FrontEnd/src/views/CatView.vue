@@ -15,7 +15,7 @@
   <v-row class="mb-6 mx-5 justify-center" no-gutters>
     <v-col v-for="(cat, index) in catsData" :key="index" cols="3">
       <v-container class="mb-16">
-        <v-card class="rounded-lg" :min-height="1085" :elevation="5">
+        <v-card class="rounded-lg" :min-height="1097" :elevation="5">
           <v-img :max-height="189" cover aspect-ratio="16/9" :src="`${cat.image_link}`">
             <template v-slot:placeholder>
               <v-row align="center" class="fill-height ma-0" justify="center">
@@ -132,7 +132,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface CatData {
   name: string
@@ -159,20 +162,20 @@ const searchText = ref('shorthair')
 
 const catsData = ref<CatData[]>([]) // Reactive variable to store fetched data
 
-const catTitle1 = ['Origin', 'Length', 'Weight', 'Life Expectancy']
+const catTitle1 = computed(() => [t('Origin'), t('Length'), t('Weight'), t('Life Expectancy')])
 
-const catTitle2 = [
-  'Family Friendly',
-  'Shedding',
-  'General Health',
-  'Playfulness',
-  'Meowing',
-  'Children Friendly',
-  'Stranger Friendly',
-  'Grooming',
-  'Intelligence',
-  'Other Pets Friendly'
-]
+const catTitle2 = computed(() => [
+  t('Family Friendly'),
+  t('Shedding'),
+  t('General Health'),
+  t('Playfulness'),
+  t('Meowing'),
+  t('Children Friendly'),
+  t('Stranger Friendly'),
+  t('Grooming'),
+  t('Intelligence'),
+  t('Other Pets Friendly')
+])
 
 const ApiKey = 'zyCZHrqXSvEkXTorn4iCbw==qUnHnF2P6vJ7EDl5'
 

@@ -3,7 +3,7 @@
     <v-col>
       <v-card class="pa-6 mt-7 mx-12" :elevation="5">
         <v-form ref="form" @submit.prevent="getQr">
-          <v-sheet class="mb-3">Số tài khoản</v-sheet>
+          <v-sheet class="mb-3">{{ t('Account Number') }}</v-sheet>
           <v-text-field
             :rules="soTkRule"
             hint="For example: X52X XXX12 45XXX X104"
@@ -14,7 +14,7 @@
           >
           </v-text-field>
 
-          <v-sheet class="mb-3">Tên tài khoản</v-sheet>
+          <v-sheet class="mb-3">{{ t('Account Name') }}</v-sheet>
           <v-text-field
             :rules="tenTkRule"
             hint="For example: Stylist Thief Slayer"
@@ -25,7 +25,7 @@
           >
           </v-text-field>
 
-          <v-sheet class="mb-3">Số tiền</v-sheet>
+          <v-sheet class="mb-3">{{ t('Amount') }}</v-sheet>
           <v-text-field
             :rules="[(v) => !!v || 'Vui lòng nhập số tiền']"
             hint="For example: 100.000.000"
@@ -36,7 +36,7 @@
           >
           </v-text-field>
 
-          <v-sheet class="mb-3">Nội dung chuyển tiền</v-sheet>
+          <v-sheet class="mb-3">{{ t('Description') }}</v-sheet>
           <v-text-field
             hint="For example: blah v.v......."
             label="Nội dung chuyển tiền"
@@ -46,7 +46,7 @@
           >
           </v-text-field>
 
-          <v-sheet class="mb-3">Tên ngân hàng</v-sheet>
+          <v-sheet class="mb-3">{{ t('Bank Name') }}</v-sheet>
           <v-autocomplete
             ref="country"
             :rules="[(v) => !!v || 'Vui lòng chọn tên ngân hàng']"
@@ -73,7 +73,7 @@
             </template>
           </v-autocomplete>
 
-          <v-btn class="bg-blue" type="submit" block>Tạo mã</v-btn>
+          <v-btn class="bg-blue" type="submit" block>{{ t('Generate QR') }}</v-btn>
         </v-form>
       </v-card>
     </v-col>
@@ -85,6 +85,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Bank {
   name: string
@@ -110,7 +113,7 @@ const soTkRule = [
 
 const tenTkRule = [
   (v: any) => !!v || 'Vui lòng nhập tên tài khoản',
-  (v: any) => (/^[\p{L}\p{N}\s]+$/gmu.test(v) && !!v) || 'Tên tài khoản chỉ được chứa chữ cái.'
+  (v: any) => (/^[\p{L}\s]+$/gmu.test(v) && !!v) || 'Tên tài khoản chỉ được chứa chữ cái.'
 ]
 
 const getBank = async () => {

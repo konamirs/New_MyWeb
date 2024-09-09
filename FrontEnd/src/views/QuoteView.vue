@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto w-screen mt-16" color="#444" width="600">
-    <v-card class="mx-3 my-3">
+  <v-card class="mx-auto w-screen mt-16" width="600">
+    <v-card class="mx-3 my-3" color="secondary">
       <v-card-text>
         {{ t('quote') }}
         <p>{{ quote }}</p>
@@ -14,14 +14,14 @@
         <p>{{ category }}</p>
       </v-card-text>
     </v-card>
-    <v-card class="mx-3 my-3">
+    <v-card class="mx-3 my-3" color="secondary">
       <v-card-text>
         {{ t('translation') }}
         <p>{{ translatedQuote }}</p>
       </v-card-text>
     </v-card>
     <v-row justify="center" class="mt-2 mb-4">
-      <v-btn @click="GetQuote">{{ t('randomQuote') }}</v-btn>
+      <v-btn @click="GetQuote" color="secondary">{{ t('randomQuote') }}</v-btn>
     </v-row>
   </v-card>
 </template>
@@ -46,26 +46,21 @@ const GetQuote = async () => {
     'attitude',
     'beauty',
     'best',
-    'birthday',
     'business',
     'change',
     'communication',
     'computers',
     'courage',
-    'dating',
-    'design',
     'dreams',
     'education',
     'environmental',
     'equality',
     'experience',
     'failure',
-    'faith',
     'family',
     'famous',
     'fear',
     'food',
-    'forgiveness',
     'freedom',
     'friendship',
     'future',

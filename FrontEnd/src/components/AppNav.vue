@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    color="transparent"
+    color="primary"
     :style="{ opacity: scrolled ? 0.5 : 1 }"
     class="mx-auto"
     max-width="448"
@@ -20,7 +20,7 @@
     <v-btn @click="toggleTheme" icon><v-icon>mdi-theme-light-dark</v-icon></v-btn>
 
     <v-btn icon>
-      <v-btn @click="toggleLanguage">{{ locale === 'en' ? 'EN' : 'VN' }}</v-btn>
+      <div @click="toggleLanguage">{{ locale === 'en' ? 'EN' : 'VN' }}</div>
     </v-btn>
 
     <v-btn icon>
@@ -79,7 +79,7 @@ watch(
 const theme = useTheme()
 
 function toggleTheme() {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  theme.global.name.value = theme.global.current.value.dark ? 'CustomLightTheme' : 'CustomDarkTheme'
 }
 
 const toggleLanguage = () => {

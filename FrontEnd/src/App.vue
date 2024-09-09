@@ -1,11 +1,11 @@
 <template>
-  <v-layout>
-    <div v-if="useTheme().global.current.value.dark" class="background"></div>
-    <v-navigation-drawer rail expand-on-hover>
+  <v-layout class="bg-background">
+    <div v-if="useTheme().global.current.value.dark" class="darkbackground"></div>
+    <v-navigation-drawer rail expand-on-hover color="secondary">
       <v-list density="default" nav>
         <v-list-item
-          prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-          title="John Leider"
+          prepend-avatar="https://cellphones.com.vn/sforum/wp-content/uploads/2024/02/avatar-anh-meo-cute-31.jpg"
+          title="Just a cat"
           nav
         >
         </v-list-item>
@@ -77,7 +77,7 @@ const changeQr = () => router.push('/vietqr')
 </script>
 
 <style scoped>
-.background {
+.darkbackground {
   position: fixed;
   top: 0;
   left: 0;

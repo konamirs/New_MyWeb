@@ -34,17 +34,21 @@
         <div
           v-if="useTheme().current.value.dark"
           style="
-            background: #333;
+            background-color: #50577a;
             min-height: 150px;
             padding-top: 20px;
             padding-left: 20px;
             margin-top: 5px;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
+            position: relative;
           "
         >
           <p v-if="isLoading">. . .</p>
           <p v-if="!isLoading && result">{{ result }}</p>
+          <v-btn icon @click="copyResult" style="position: absolute; bottom: 10px; right: 10px">
+            <v-icon>mdi-content-copy</v-icon>
+          </v-btn>
         </div>
         <div
           v-if="!useTheme().current.value.dark"

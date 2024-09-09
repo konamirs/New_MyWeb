@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters>
     <v-col>
-      <v-card class="pa-6 mt-7 mx-12" :elevation="5">
+      <v-card class="pa-6 mt-7 mx-12 rounded-xl" :elevation="5">
         <v-form ref="form" @submit.prevent="getQr">
           <v-sheet class="mb-3">{{ t('Account Number') }}</v-sheet>
           <v-text-field
@@ -73,19 +73,27 @@
             </template>
           </v-autocomplete>
 
-          <v-btn class="bg-blue" type="submit" block>{{ t('Generate QR') }}</v-btn>
+          <v-btn class="bg-blue border-md rounded-lg" type="submit" block>{{
+            t('Generate QR')
+          }}</v-btn>
         </v-form>
       </v-card>
     </v-col>
     <v-col>
-      <v-img class="mt-8" :max-height="575" :src="image"></v-img>
+      <v-img
+        class="mt-8 mx-auto border-md rounded-xl"
+        :max-height="575"
+        :max-width="445"
+        :src="image"
+      ></v-img>
     </v-col>
   </v-row>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import TemplateQR from '@/image/TemplateQR.jpg'
 
 const { t } = useI18n()
 
@@ -128,17 +136,18 @@ const getBank = async () => {
   console.log(banks.value, 'bank')
 }
 
-getBank()
-
 const getQr = async () => {
   if (form.value) {
     const isValid = await form.value.validate()
-    if (isValid) {
-      const response =
-        await `https://img.vietqr.io/image/${selectedBank.value}-${soTK.value}-print.png?amount=${soTien.value}&addInfo=${noiDung.value}&accountName=${tenTK.value}`
-
+    if (isValid.valid === true) {
+      const response = `https://img.vietqr.io/image/${selectedBank.value}-${soTK.value}-print.png?amount=${soTien.value}&addInfo=${noiDung.value}&accountName=${tenTK.value}`
       image.value = response
     }
   }
 }
+
+onMounted(() => {
+  getBank()
+  image.value = TemplateQR
+})
 </script>

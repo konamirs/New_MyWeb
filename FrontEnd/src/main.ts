@@ -6,7 +6,7 @@ import router from './router'
 
 // Vuetify
 import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
+import { createVuetify, type ThemeDefinition } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
@@ -19,13 +19,38 @@ import '@mdi/font/css/materialdesignicons.css'
 
 const app = createApp(App).use(router)
 
+const CustomDarkTheme: ThemeDefinition = {
+  dark: true,
+  colors: {
+    background: '#404258  ',
+    surface: '#474E68 ',
+    primary: '#50577A',
+    secondary: '#6B728E'
+  }
+}
+
+const CustomLightTheme: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#DCBFFF  ',
+    surface: '#F1EAFF ',
+    primary: '#D0A2F7',
+    secondary: '#E5D4FF'
+  }
+}
+
 const vuetify = createVuetify({
   components,
   directives,
   theme: {
-    defaultTheme: 'light'
+    defaultTheme: 'CustomLightTheme',
+    themes: {
+      CustomDarkTheme,
+      CustomLightTheme
+    }
     // defaultTheme: 'dark'
   },
+
   icons: {
     defaultSet: 'mdi',
     aliases,

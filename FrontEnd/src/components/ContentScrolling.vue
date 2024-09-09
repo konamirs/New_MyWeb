@@ -43,10 +43,10 @@ onMounted(() => {
 }
 @keyframes scrolling {
   0% {
-    transform: translateX(100vw);
+    transform: translateX(110vw);
   }
   100% {
-    transform: translateX(-45vw);
+    transform: translateX(-60vw);
   }
 }
 </style>

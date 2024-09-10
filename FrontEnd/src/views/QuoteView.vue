@@ -2,26 +2,33 @@
   <v-card class="mx-auto w-screen mt-16" width="600">
     <v-card class="mx-3 my-3" color="secondary">
       <v-card-text>
-        {{ t('quote') }}
+        <p class="text-h6">{{ t('quote') }}:</p>
+
         <p>{{ quote }}</p>
       </v-card-text>
       <v-card-text>
-        {{ t('author') }}
-        <p>{{ author }}</p>
+        <a class="text-h6">{{ t('author') }}:</a>
+        <a class="font-weight-light text-h6 ml-4"> {{ author }}</a>
       </v-card-text>
       <v-card-text>
-        {{ t('category') }}
-        <p>{{ category }}</p>
+        <p class="text-h6">
+          {{ t('category') }}:
+          <v-btn border="success double lg" class="rounded-xl" color="#b2f78b" disabled>{{
+            category
+          }}</v-btn>
+        </p>
       </v-card-text>
     </v-card>
     <v-card class="mx-3 my-3" color="secondary">
       <v-card-text>
-        {{ t('translation') }}
+        <p class="text-h6">{{ t('translation') }}:</p>
         <p>{{ translatedQuote }}</p>
       </v-card-text>
     </v-card>
     <v-row justify="center" class="mt-2 mb-4">
-      <v-btn @click="GetQuote" color="secondary">{{ t('randomQuote') }}</v-btn>
+      <v-btn @click="GetQuote" color="secondary" rounded="lg"
+        ><p class="text-h5 font-weight-bold">{{ t('randomQuote') }}</p></v-btn
+      >
     </v-row>
   </v-card>
 </template>

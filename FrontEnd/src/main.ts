@@ -32,10 +32,10 @@ const CustomDarkTheme: ThemeDefinition = {
 const CustomLightTheme: ThemeDefinition = {
   dark: false,
   colors: {
-    background: '#DCBFFF  ',
-    surface: '#F1EAFF ',
-    primary: '#D0A2F7',
-    secondary: '#E5D4FF'
+    background: '#b8e5eb  ',
+    surface: '#f5f2ec ',
+    primary: '#3f85c6',
+    secondary: '#63aff3'
   }
 }
 

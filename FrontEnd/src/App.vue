@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="bg-background">
+  <v-layout>
     <div v-if="useTheme().global.current.value.dark" class="darkbackground"></div>
     <v-navigation-drawer rail expand-on-hover color="secondary">
       <v-list density="default" nav>
@@ -54,7 +54,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-main class="h-screen">
+    <v-main class="d-flex flex-column h-full bg-background" min-height="100vh">
       <app-nav />
       <router-view />
     </v-main>

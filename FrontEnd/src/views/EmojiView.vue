@@ -13,7 +13,7 @@
     ></v-text-field>
   </div>
 
-  <v-row class="mb-6 mx-10 justify-center" no-gutters>
+  <v-row v-if="EmojiData.length > 0" class="mb-6 mx-10 justify-center" no-gutters>
     <v-col v-for="(emoji, index) in EmojiData" :key="index" cols="3">
       <v-skeleton-loader
         color="transparent"
@@ -39,6 +39,13 @@
       >
     </v-col>
   </v-row>
+  <div v-else>
+    <v-empty-state
+      icon="mdi-magnify"
+      text="Try adjusting your search terms or filters. Sometimes less specific terms or broader queries can help you find what you're looking for."
+      title="We couldn't find a match."
+    ></v-empty-state>
+  </div>
 </template>
 
 <script setup lang="ts">

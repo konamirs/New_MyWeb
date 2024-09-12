@@ -6,75 +6,47 @@
         :items="holidays"
         v-model="selectedHoliday"
         variant="outlined"
-        @change="onHolidaySelect"
-      ></v-select>
+        @change="updateHoliday"
+      />
     </v-container>
 
     <v-row class="mb-6 mx-10" no-gutters>
-      <v-hover v-slot="{ isHovering, props }">
-        <v-col>
+      <v-col v-for="(unit, index) in timeUnits" :key="index">
+        <v-hover v-slot="{ isHovering, props }">
           <v-card
-            :class="['mx-2', 'rounded-xl', isHovering ? 'onHover' : '']"
+            class="mx-2 rounded-xl"
+            :class="{ onHover: isHovering }"
             v-bind="props"
             :elevation="5"
           >
-            <div class="text-center font-weight-bold text-h2 mt-3">{{ days }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Days') }}</div>
+            <div class="text-center font-weight-bold text-h2 mt-3">{{ unit.value }}</div>
+            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t(unit.label) }}</div>
           </v-card>
-        </v-col> </v-hover
-      ><v-hover v-slot="{ isHovering, props }">
-        <v-col>
-          <v-card
-            :class="['mx-2', 'rounded-xl', isHovering ? 'onHover' : '']"
-            v-bind="props"
-            :elevation="5"
-          >
-            <div class="text-center font-weight-bold text-h2 mt-3">{{ hours }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Hours') }}</div>
-          </v-card>
-        </v-col> </v-hover
-      ><v-hover v-slot="{ isHovering, props }">
-        <v-col>
-          <v-card
-            :class="['mx-2', 'rounded-xl', isHovering ? 'onHover' : '']"
-            v-bind="props"
-            :elevation="5"
-          >
-            <div class="text-center font-weight-bold text-h2 mt-3">{{ minutes }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Minutes') }}</div>
-          </v-card>
-        </v-col>
-      </v-hover>
-      <v-hover v-slot="{ isHovering, props }">
-        <v-col>
-          <v-card
-            :class="['mx-2', 'rounded-xl', isHovering ? 'onHover' : '']"
-            v-bind="props"
-            :elevation="5"
-          >
-            <div class="text-center font-weight-bold text-h2 mt-3">{{ seconds }}</div>
-            <div class="text-center text-disabled text-h6 ml-2 mb-3">{{ t('Seconds') }}</div>
-          </v-card>
-        </v-col>
-      </v-hover>
+        </v-hover>
+      </v-col>
     </v-row>
-    <v-sheet class="text-center font-weight-bold text-h5"
-      >{{ t('SelectedDate') }}: {{ selectedHoliday }}</v-sheet
-    >
-    <v-sheet class="text-center text-disabled text-h6 mb-10"
-      >{{ t('Date') }}: {{ selectedHolidayDate }}</v-sheet
-    >
+    <v-sheet class="text-center font-weight-bold text-h5">
+      {{ t('SelectedDate') }}: {{ selectedHoliday }}
+    </v-sheet>
+    <v-sheet class="text-center text-disabled text-h6 mb-10">
+      {{ t('Date') }}: {{ selectedHolidayDate }}
+    </v-sheet>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+// Define type with index signature
+interface HolidayDates {
+  [key: string]: string
+}
 
 const { t } = useI18n()
 
-// Map holidays to their corresponding dates (ensure dates are in YYYY-MM-DD format)
-const holidayDates: { [key: string]: string } = {
+// Map holidays to their corresponding dates
+const holidayDates: HolidayDates = {
   'Tết nguyên đán (1/1 âm lịch)': '2025-01-29',
   'Giáng sinh (25/12)': '2024-12-25',
   'Quốc khánh (2/9)': '2025-09-02',
@@ -92,43 +64,43 @@ const holidayDates: { [key: string]: string } = {
 
 const holidays = ref(Object.keys(holidayDates))
 const selectedHoliday = ref('Tết nguyên đán (1/1 âm lịch)')
-const selectedHolidayDate = ref('2025-01-29')
-const days = ref(0)
-const hours = ref(0)
-const minutes = ref(0)
-const seconds = ref(0)
-let timer: number | undefined = undefined
+const selectedHolidayDate = ref(holidayDates[selectedHoliday.value])
+const timeUnits = ref([
+  { value: 0, label: 'Days' },
+  { value: 0, label: 'Hours' },
+  { value: 0, label: 'Minutes' },
+  { value: 0, label: 'Seconds' }
+])
+let timer: number | undefined
 
 const updateTimer = () => {
-  if (selectedHolidayDate.value) {
-    const t =
-      Date.parse(selectedHolidayDate.value) - Date.now() + new Date().getTimezoneOffset() * 60000
-    if (t >= 0) {
-      days.value = Math.floor(t / (1000 * 60 * 60 * 24))
-      hours.value = Math.floor((t / (1000 * 60 * 60)) % 24)
-      minutes.value = Math.floor((t / (1000 * 60)) % 60)
-      seconds.value = Math.floor((t / 1000) % 60)
-    } else {
-      days.value = hours.value = minutes.value = seconds.value = 0
-      clearInterval(timer) // Stop timer if the date has passed
-    }
+  if (!selectedHolidayDate.value) return
+  const t =
+    Date.parse(selectedHolidayDate.value) - Date.now() + new Date().getTimezoneOffset() * 60000
+  if (t >= 0) {
+    timeUnits.value = [
+      { value: Math.floor(t / (1000 * 60 * 60 * 24)), label: 'Days' },
+      { value: Math.floor((t / (1000 * 60 * 60)) % 24), label: 'Hours' },
+      { value: Math.floor((t / (1000 * 60)) % 60), label: 'Minutes' },
+      { value: Math.floor((t / 1000) % 60), label: 'Seconds' }
+    ]
+  } else {
+    timeUnits.value = timeUnits.value.map((unit) => ({ ...unit, value: 0 }))
+    clearInterval(timer)
   }
 }
 
-const onHolidaySelect = () => {
+const updateHoliday = () => {
   selectedHolidayDate.value = holidayDates[selectedHoliday.value] || ''
+  clearInterval(timer)
   if (selectedHolidayDate.value) {
-    clearInterval(timer) // Clear any existing timer
-    timer = setInterval(updateTimer, 1000) // Start a new timer
-    updateTimer() // Update timer immediately
+    timer = setInterval(updateTimer, 1000)
+    updateTimer()
   }
 }
 
-watch(selectedHoliday, onHolidaySelect)
-onMounted(() => {
-  updateTimer()
-  onHolidaySelect()
-})
+watch(selectedHoliday, updateHoliday)
+onMounted(updateHoliday)
 </script>
 
 <style>
@@ -136,10 +108,7 @@ onMounted(() => {
   animation: goup 0.5s ease-in-out forwards;
 }
 @keyframes goup {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
+  to {
     transform: translateY(-15px);
   }
 }

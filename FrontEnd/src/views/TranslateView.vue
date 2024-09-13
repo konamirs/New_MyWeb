@@ -5,6 +5,7 @@
         <v-sheet>{{ t('Source Language') }}</v-sheet>
         <v-select v-model="from" :items="langNames" variant="outlined" density="compact" />
         <v-sheet class="mb-1 mr-3">{{ t('Text to Translate') }}</v-sheet>
+
         <div style="position: relative">
           <v-textarea v-model="text" :rules="[limitRule]" counter @input="debouncedTranslate" />
           <v-btn icon @click="copyText(text)" style="position: absolute; bottom: 32px; right: 10px">
@@ -12,10 +13,12 @@
           </v-btn>
         </div>
       </v-col>
+
       <v-col class="mx-7">
         <v-sheet>{{ t('Target Language') }}</v-sheet>
         <v-select v-model="to" :items="targetLangNames" variant="outlined" density="compact" />
         <v-sheet>{{ t('Translated Text') }}</v-sheet>
+
         <div :style="themeStyle">
           <p v-if="isLoading">. . .</p>
           <p v-else>{{ result }}</p>
@@ -44,13 +47,13 @@ import { useI18n } from 'vue-i18n'
 import type { CSSProperties } from 'vue'
 
 const { t } = useI18n()
-const theme = useTheme().current.value
 const langList = [
   { code: 'auto', name: 'Auto Detect' },
   { code: 'vi', name: 'Vietnamese' },
   { code: 'en', name: 'English' },
   { code: 'ja', name: 'Japanese' }
 ]
+
 const langNames = langList.map((lang) => lang.name)
 const targetLangNames = langList.slice(1).map((lang) => lang.name)
 const text = ref(''),
@@ -63,7 +66,7 @@ const fromCode = computed(() => langList.find((lang) => lang.name === from.value
 const toCode = computed(() => langList.find((lang) => lang.name === to.value)?.code || 'vi')
 
 const themeStyle = computed<CSSProperties>(() => ({
-  backgroundColor: theme.dark ? '#50577a' : '#dedede',
+  backgroundColor: useTheme().global.current.value.dark ? '#50577a' : '#dedede',
   minHeight: '150px',
   paddingTop: '20px',
   paddingLeft: '20px',
@@ -72,6 +75,7 @@ const themeStyle = computed<CSSProperties>(() => ({
   borderTopRightRadius: '5px',
   position: 'relative'
 }))
+
 const limitRule = (v: string) => v.length <= 5000 || 'Max 5000 characters'
 
 const translate = async () => {

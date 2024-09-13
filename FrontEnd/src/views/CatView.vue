@@ -36,6 +36,7 @@
               <v-col class="me-auto">
                 <v-sheet class="pa-2 ma-2 font-weight-bold">{{ catLabels[i] }}:</v-sheet>
               </v-col>
+
               <v-col>
                 <v-sheet class="pa-2 ma-2 mt-2 text-end">{{ value }}</v-sheet>
               </v-col>
@@ -45,6 +46,7 @@
               <v-col class="me-auto">
                 <v-sheet class="pa-2 ma-2 font-weight-bold">{{ ratingLabels[i] }}:</v-sheet>
               </v-col>
+
               <v-col cols="auto">
                 <v-rating v-model="rating.value" class="mt-3 mr-2 text-blue" density="compact" />
               </v-col>

@@ -30,6 +30,7 @@
                 </v-row>
               </template>
             </v-img>
+
             <v-sheet class="pa-2 ma-2 text-center text-h4"> {{ emoji.character }} </v-sheet>
             <v-sheet class="pa-2 ma-2 mb-10 mt-3 text-center font-weight-bold text-h5">
               {{ emoji.name }}
@@ -39,6 +40,7 @@
       >
     </v-col>
   </v-row>
+
   <div v-else>
     <v-empty-state
       icon="mdi-magnify"

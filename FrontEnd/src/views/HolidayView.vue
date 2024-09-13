@@ -25,46 +25,27 @@
         </v-hover>
       </v-col>
     </v-row>
+
     <v-sheet class="text-center font-weight-bold text-h5">
       {{ t('SelectedDate') }}: {{ selectedHoliday }}
     </v-sheet>
+
     <v-sheet class="text-center text-disabled text-h6 mb-10">
-      {{ t('Date') }}: {{ selectedHolidayDate }}
+      {{ t('Date') }}: {{ formattedSelectedHolidayDate }}
     </v-sheet>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import axios from 'axios'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-
-// Define type with index signature
-interface HolidayDates {
-  [key: string]: string
-}
 
 const { t } = useI18n()
 
-// Map holidays to their corresponding dates
-const holidayDates: HolidayDates = {
-  'Tết nguyên đán (1/1 âm lịch)': '2025-01-29',
-  'Giáng sinh (25/12)': '2024-12-25',
-  'Quốc khánh (2/9)': '2025-09-02',
-  'Ngày thống nhất (30/4)': '2025-04-30',
-  'Valentine (14/2)': '2025-02-14',
-  'Valentine trắng (14/3)': '2025-03-14',
-  'Ngày nhà giáo Việt Nam (20/11)': '2024-11-20',
-  'Ngày quốc tế phụ nữ (8/3)': '2025-03-08',
-  'Ngày phụ nữ Việt Nam (20/11)': '2024-11-20',
-  'Tết dương lịch (1/1)': '2025-01-01',
-  'Giỗ tổ Hùng vương (10/3 âm lịch)': '2025-04-07',
-  'Trung thu (15/8 âm lịch)': '2024-09-17',
-  'Ngày quốc tế thiếu nhi (1/6)': '2025-06-01'
-}
-
-const holidays = ref(Object.keys(holidayDates))
-const selectedHoliday = ref('Tết nguyên đán (1/1 âm lịch)')
-const selectedHolidayDate = ref(holidayDates[selectedHoliday.value])
+const holidays = ref<string[]>([])
+const selectedHoliday = ref('')
+const selectedHolidayDate = ref('')
 const timeUnits = ref([
   { value: 0, label: 'Days' },
   { value: 0, label: 'Hours' },
@@ -72,12 +53,68 @@ const timeUnits = ref([
   { value: 0, label: 'Seconds' }
 ])
 let timer: number | undefined
+const allHolidays = ref<any[]>([])
+
+const fetchHolidays = async () => {
+  try {
+    const currentYear = new Date().getFullYear()
+    const nextYear = currentYear + 1
+
+    // Fetch holidays for current year
+    const response1 = await axios.get('/api/api/v1/holidays', {
+      params: {
+        country: 'VN',
+        language: 'VI',
+        year: currentYear,
+        apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
+      }
+    })
+    const data1 = await response1.data
+
+    // // Wait for 1.2 seconds
+    // await new Promise((resolve) => setTimeout(resolve, 1200))
+
+    // // Fetch holidays for next year
+    // const response2 = await axios.get('/api/api/v1/holidays', {
+    //   params: {
+    //     country: 'VN',
+    //     language: 'VI',
+    //     year: nextYear,
+    //     apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
+    //   }
+    // })
+    // const data2 = await response2.data
+
+    // Combine holidays data
+    allHolidays.value = [...data1.holidays]
+
+    // Update holidays list
+    holidays.value = allHolidays.value.map((holiday) => holiday.name)
+
+    // Set default selected holiday
+    if (holidays.value.length > 0) {
+      selectedHoliday.value = holidays.value[0]
+      updateHoliday()
+    }
+  } catch (error) {
+    console.error('Error fetching holidays:', error)
+  }
+}
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  return date.toISOString().split('T')[0]
+}
 
 const updateTimer = () => {
   if (!selectedHolidayDate.value) return
+
+  // Calculate the difference in milliseconds
   const t =
     Date.parse(selectedHolidayDate.value) - Date.now() + new Date().getTimezoneOffset() * 60000
+
   if (t >= 0) {
+    // Calculate the remaining time units
     timeUnits.value = [
       { value: Math.floor(t / (1000 * 60 * 60 * 24)), label: 'Days' },
       { value: Math.floor((t / (1000 * 60 * 60)) % 24), label: 'Hours' },
@@ -85,22 +122,30 @@ const updateTimer = () => {
       { value: Math.floor((t / 1000) % 60), label: 'Seconds' }
     ]
   } else {
+    // If the date has passed, set all time units to 0
     timeUnits.value = timeUnits.value.map((unit) => ({ ...unit, value: 0 }))
     clearInterval(timer)
   }
 }
 
 const updateHoliday = () => {
-  selectedHolidayDate.value = holidayDates[selectedHoliday.value] || ''
-  clearInterval(timer)
-  if (selectedHolidayDate.value) {
+  const holiday = allHolidays.value.find((holiday) => holiday.name === selectedHoliday.value)
+  if (holiday) {
+    selectedHolidayDate.value = formatDate(holiday.end)
+    clearInterval(timer)
     timer = setInterval(updateTimer, 1000)
     updateTimer()
+  } else {
+    selectedHolidayDate.value = ''
   }
 }
 
+const formattedSelectedHolidayDate = computed(() => {
+  return selectedHolidayDate.value ? formatDate(selectedHolidayDate.value) : ''
+})
+
 watch(selectedHoliday, updateHoliday)
-onMounted(updateHoliday)
+onMounted(fetchHolidays)
 </script>
 
 <style>

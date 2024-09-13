@@ -27,7 +27,7 @@
 
           <v-sheet class="mb-3">{{ t('Amount') }}</v-sheet>
           <v-text-field
-            :rules="[(v) => !!v || 'Vui lòng nhập số tiền']"
+            :rules="soTienRule"
             hint="For example: 100.000.000"
             label="Số tiền"
             density="compact"
@@ -116,7 +116,9 @@ const soTK = ref('')
 //validate text
 const soTkRule = [
   (v: any) => !!v || 'Vui lòng nhập số tài khoản',
-  (v: any) => (v.length >= 9 && v.length <= 18) || 'Số tài khoản phải trong khoảng 9-18 kí tự'
+  (v: any) =>
+    (v.length >= 9 && v.length <= 18 && /^\d+$/g.test(v)) ||
+    'Số tài khoản phải trong khoảng 9-18 kí tự và chỉ được chứa số'
 ]
 
 const tenTkRule = [
@@ -124,6 +126,10 @@ const tenTkRule = [
   (v: any) => (/^[\p{L}\s]+$/gmu.test(v) && !!v) || 'Tên tài khoản chỉ được chứa chữ cái.'
 ]
 
+const soTienRule = [
+  (v: any) => !!v || 'Vui lòng nhập số tiền',
+  (v: any) => (/^\d+$/g.test(v) && !!v) || 'Số tiền chỉ được chứa số'
+]
 const getBank = async () => {
   const response = await fetch('https://api.vietqr.io/v2/banks')
   const data = await response.json()
@@ -133,7 +139,6 @@ const getBank = async () => {
     shortName: item.shortName,
     logo: item.logo
   }))
-  console.log(banks.value, 'bank')
 }
 
 const getQr = async () => {

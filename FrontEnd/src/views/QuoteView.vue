@@ -5,10 +5,12 @@
         <p class="text-h6">{{ t('quote') }}:</p>
         <p>{{ quoteData.quote }}</p>
       </v-card-text>
+
       <v-card-text>
         <span class="text-h6">{{ t('author') }}:</span>
         <span class="font-weight-light text-h6 ml-4"> {{ quoteData.author }}</span>
       </v-card-text>
+
       <v-card-text>
         <p class="text-h6">
           {{ t('category') }}:

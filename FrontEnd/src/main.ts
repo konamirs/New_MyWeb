@@ -17,13 +17,13 @@ import vi from './locates/vi.json'
 import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.css'
 
-const app = createApp(App).use(router)
+const app = createApp(App)
 
 const CustomDarkTheme: ThemeDefinition = {
   dark: true,
   colors: {
-    background: '#404258  ',
-    surface: '#474E68 ',
+    background: '#404258',
+    surface: '#474E68',
     primary: '#50577A',
     secondary: '#6B728E'
   }
@@ -32,8 +32,8 @@ const CustomDarkTheme: ThemeDefinition = {
 const CustomLightTheme: ThemeDefinition = {
   dark: false,
   colors: {
-    background: '#b8e5eb  ',
-    surface: '#f5f2ec ',
+    background: '#b8e5eb',
+    surface: '#f5f2ec',
     primary: '#3f85c6',
     secondary: '#63aff3'
   }

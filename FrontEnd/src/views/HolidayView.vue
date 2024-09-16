@@ -46,6 +46,7 @@ const { t } = useI18n()
 const holidays = ref<string[]>([])
 const selectedHoliday = ref('')
 const selectedHolidayDate = ref('')
+const hasFetchedHolidays = ref(false)
 const timeUnits = ref([
   { value: 0, label: 'Days' },
   { value: 0, label: 'Hours' },
@@ -56,63 +57,56 @@ let timer: number | undefined
 const allHolidays = ref<any[]>([])
 
 const fetchHolidays = async () => {
-  try {
-    const currentYear = new Date().getFullYear()
-    const nextYear = currentYear + 1
+  const currentYear = new Date().getFullYear()
+  const nextYear = currentYear + 1
 
-    // Fetch holidays for current year
-    const response1 = await axios.get('/api/api/v1/holidays', {
-      params: {
-        country: 'VN',
-        language: 'VI',
-        year: currentYear,
-        apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
-      }
-    })
-    const data1 = await response1.data
-
-    // // Wait for 1.2 seconds
-    // await new Promise((resolve) => setTimeout(resolve, 1200))
-
-    // // Fetch holidays for next year
-    // const response2 = await axios.get('/api/api/v1/holidays', {
-    //   params: {
-    //     country: 'VN',
-    //     language: 'VI',
-    //     year: nextYear,
-    //     apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
-    //   }
-    // })
-    // const data2 = await response2.data
-
-    // Combine holidays data
-    allHolidays.value = [...data1.holidays]
-
-    // Update holidays list
-    holidays.value = allHolidays.value.map((holiday) => holiday.name)
-
-    // Set default selected holiday
-    if (holidays.value.length > 0) {
-      selectedHoliday.value = holidays.value[0]
-      updateHoliday()
+  // Fetch holidays for current year
+  const response1 = await axios.get('/api/api/v1/holidays', {
+    params: {
+      country: 'VN',
+      language: 'VI',
+      year: currentYear,
+      apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
     }
-  } catch (error) {
-    console.error('Error fetching holidays:', error)
+  })
+  const data1 = await response1.data
+
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  // Fetch holidays for next year
+  const response2 = await axios.get('/api/api/v1/holidays', {
+    params: {
+      country: 'VN',
+      language: 'VI',
+      year: nextYear,
+      apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
+    }
+  })
+  const data2 = await response2.data
+
+  // Combine holidays data
+  allHolidays.value = [...data1.holidays, ...data2.holidays]
+
+  // Update holidays list
+  holidays.value = allHolidays.value.map((holiday) => holiday.name)
+
+  // Set default selected holiday
+  if (holidays.value.length > 0) {
+    selectedHoliday.value = holidays.value[0]
+    updateHoliday()
   }
 }
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
-  return date.toISOString().split('T')[0]
+  return date.toLocaleDateString().split('T')[0]
 }
 
 const updateTimer = () => {
   if (!selectedHolidayDate.value) return
 
   // Calculate the difference in milliseconds
-  const t =
-    Date.parse(selectedHolidayDate.value) - Date.now() + new Date().getTimezoneOffset() * 60000
-
+  const t = Date.parse(selectedHolidayDate.value) - Date.now()
   if (t >= 0) {
     // Calculate the remaining time units
     timeUnits.value = [
@@ -129,14 +123,24 @@ const updateTimer = () => {
 }
 
 const updateHoliday = () => {
-  const holiday = allHolidays.value.find((holiday) => holiday.name === selectedHoliday.value)
+  let holiday = allHolidays.value.find((holiday) => holiday.name === selectedHoliday.value)
   if (holiday) {
-    selectedHolidayDate.value = formatDate(holiday.end)
-    clearInterval(timer)
-    timer = setInterval(updateTimer, 1000)
-    updateTimer()
-  } else {
-    selectedHolidayDate.value = ''
+    if (new Date(holiday.date) < new Date()) {
+      // If the selected holiday's date has passed, find the same holiday in the next year
+      holiday = allHolidays.value.find(
+        (holiday) =>
+          holiday.name === selectedHoliday.value &&
+          new Date(holiday.date).getFullYear() > new Date().getFullYear()
+      )
+    }
+    if (holiday) {
+      selectedHolidayDate.value = holiday.date
+      clearInterval(timer)
+      timer = setInterval(updateTimer, 1000)
+      updateTimer()
+    } else {
+      selectedHolidayDate.value = ''
+    }
   }
 }
 
@@ -145,16 +149,10 @@ const formattedSelectedHolidayDate = computed(() => {
 })
 
 watch(selectedHoliday, updateHoliday)
-onMounted(fetchHolidays)
-</script>
-
-<style>
-.onHover {
-  animation: goup 0.5s ease-in-out forwards;
-}
-@keyframes goup {
-  to {
-    transform: translateY(-15px);
+onMounted(async () => {
+  if (!hasFetchedHolidays.value) {
+    await fetchHolidays()
+    hasFetchedHolidays.value = true
   }
-}
-</style>
+})
+</script>

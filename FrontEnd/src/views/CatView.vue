@@ -13,7 +13,7 @@
     />
 
     <v-row v-if="catsData.length" class="mb-6 mx-5 justify-center" no-gutters>
-      <v-col v-for="(cat, index) in catsData" :key="index" cols="3">
+      <v-col v-for="(cat, index) in catsData" :key="index" cols="3" class="mb-6">
         <v-skeleton-loader
           :loading="loading"
           color="transparent"

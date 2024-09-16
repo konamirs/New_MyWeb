@@ -1,10 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import QuoteView from '@/views/QuoteView.vue'
-import CatView from '@/views/CatView.vue'
-import EmojiView from '@/views/EmojiView.vue'
-import HolidayView from '@/views/HolidayView.vue'
-import QRView from '@/views/QRView.vue'
-import TranslateView from '@/views/TranslateView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,32 +6,32 @@ const router = createRouter({
     {
       path: '/',
       name: 'Quote',
-      component: QuoteView
+      component: () => import(/* webpackPrefetch: true */ '../views/QuoteView.vue')
     },
     {
       path: '/cat',
       name: 'Cat',
-      component: CatView
+      component: () => import(/* webpackPrefetch: true */ '../views/CatView.vue')
     },
     {
       path: '/emoji',
       name: 'Emoji',
-      component: EmojiView
+      component: () => import(/* webpackPrefetch: true */ '../views/EmojiView.vue')
     },
     {
       path: '/holiday',
       name: 'Holiday',
-      component: HolidayView
+      component: () => import(/* webpackPrefetch: true */ '../views/HolidayView.vue')
     },
     {
       path: '/vietqr',
       name: 'VietQR',
-      component: QRView
+      component: () => import(/* webpackPrefetch: true */ '../views/QRView.vue')
     },
     {
       path: '/translate',
       name: 'Translate',
-      component: TranslateView
+      component: () => import('../views/TranslateView.vue')
     }
   ]
 })

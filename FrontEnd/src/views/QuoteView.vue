@@ -14,7 +14,7 @@
       <v-card-text>
         <p class="text-h6">
           {{ t('category') }}:
-          <v-btn border="success double lg" class="rounded-xl" color="#b2f78b" disabled>
+          <v-btn border="success double lg" class="rounded-xl" color="surface" disabled>
             {{ quoteData.category }}
           </v-btn>
         </p>

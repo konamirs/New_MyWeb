@@ -37,72 +37,34 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
-import { ref, onMounted, watch, computed } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useHolidayStore } from '@/stores/holiday'
 
 const { t } = useI18n()
+const holidayStore = useHolidayStore()
 
-const holidays = ref<string[]>([])
-const selectedHoliday = ref('')
-const selectedHolidayDate = ref('')
-const hasFetchedHolidays = ref(false)
-const timeUnits = ref([
-  { value: 0, label: 'Days' },
-  { value: 0, label: 'Hours' },
-  { value: 0, label: 'Minutes' },
-  { value: 0, label: 'Seconds' }
-])
-let timer: number | undefined
-const allHolidays = ref<any[]>([])
+const holidays = computed(() => {
+  const uniqueHolidays = [...new Set(holidayStore.holidays)]
+  return uniqueHolidays
+})
+const selectedHoliday = ref<string>(holidayStore.selectedHoliday)
+const timeUnits = ref(holidayStore.timeUnits)
+const selectedHolidayDate = ref<string>(holidayStore.selectedHolidayDate)
 
-const fetchHolidays = async () => {
-  const currentYear = new Date().getFullYear()
-  const nextYear = currentYear + 1
-
-  // Fetch holidays for current year
-  const response1 = await axios.get('/api/api/v1/holidays', {
-    params: {
-      country: 'VN',
-      language: 'VI',
-      year: currentYear,
-      apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
-    }
-  })
-  const data1 = await response1.data
-
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  // Fetch holidays for next year
-  const response2 = await axios.get('/api/api/v1/holidays', {
-    params: {
-      country: 'VN',
-      language: 'VI',
-      year: nextYear,
-      apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
-    }
-  })
-  const data2 = await response2.data
-
-  // Combine holidays data
-  allHolidays.value = [...data1.holidays, ...data2.holidays]
-
-  // Update holidays list
-  holidays.value = allHolidays.value.map((holiday) => holiday.name)
-
-  // Set default selected holiday
-  if (holidays.value.length > 0) {
-    selectedHoliday.value = holidays.value[0]
-    updateHoliday()
-  }
-}
-
-const formatDate = (dateString: string) => {
+// Function to format date
+function formatDate(dateString: string): string {
   const date = new Date(dateString)
   return date.toLocaleDateString().split('T')[0]
 }
 
-const updateTimer = () => {
+// Computed property to format the selected holiday date
+const formattedSelectedHolidayDate = computed(() => {
+  return selectedHolidayDate.value ? formatDate(selectedHolidayDate.value) : ''
+})
+
+// Update Timer
+function updateTimer() {
   if (!selectedHolidayDate.value) return
 
   // Calculate the difference in milliseconds
@@ -118,16 +80,17 @@ const updateTimer = () => {
   } else {
     // If the date has passed, set all time units to 0
     timeUnits.value = timeUnits.value.map((unit) => ({ ...unit, value: 0 }))
-    clearInterval(timer)
+    clearInterval(timer.value)
   }
 }
 
-const updateHoliday = () => {
-  let holiday = allHolidays.value.find((holiday) => holiday.name === selectedHoliday.value)
+// Update Holiday
+function updateHoliday() {
+  let holiday = holidayStore.allHolidays.find((holiday) => holiday.name === selectedHoliday.value)
   if (holiday) {
     if (new Date(holiday.date) < new Date()) {
       // If the selected holiday's date has passed, find the same holiday in the next year
-      holiday = allHolidays.value.find(
+      holiday = holidayStore.allHolidays.find(
         (holiday) =>
           holiday.name === selectedHoliday.value &&
           new Date(holiday.date).getFullYear() > new Date().getFullYear()
@@ -135,8 +98,8 @@ const updateHoliday = () => {
     }
     if (holiday) {
       selectedHolidayDate.value = holiday.date
-      clearInterval(timer)
-      timer = setInterval(updateTimer, 1000)
+      clearInterval(timer.value)
+      timer.value = setInterval(updateTimer, 1000)
       updateTimer()
     } else {
       selectedHolidayDate.value = ''
@@ -144,15 +107,30 @@ const updateHoliday = () => {
   }
 }
 
-const formattedSelectedHolidayDate = computed(() => {
-  return selectedHolidayDate.value ? formatDate(selectedHolidayDate.value) : ''
-})
+// Timer ref
+const timer = ref<number | undefined>()
 
-watch(selectedHoliday, updateHoliday)
+// Watch for changes in selectedHoliday
+watch(
+  selectedHoliday,
+  () => {
+    if (selectedHoliday.value) {
+      updateHoliday()
+    }
+  },
+  { immediate: true } // Ensure the watcher runs immediately on mount
+)
+
 onMounted(async () => {
-  if (!hasFetchedHolidays.value) {
-    await fetchHolidays()
-    hasFetchedHolidays.value = true
+  if (!holidayStore.hasFetchedHolidays) {
+    await holidayStore.fetchHolidays()
+    holidayStore.hasFetchedHolidays = true
+
+    // If there are holidays available, set the default selectedHoliday
+    if (holidayStore.holidays.length > 0) {
+      selectedHoliday.value = holidayStore.holidays[0]
+      updateHoliday()
+    }
   }
 })
 </script>

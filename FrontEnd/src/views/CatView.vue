@@ -68,6 +68,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { CatData } from '../stores/type'
 
 const { t } = useI18n()
 const loading = ref(true)
@@ -95,7 +96,7 @@ const fetchCatData = async () => {
     headers: { 'X-Api-Key': 'zyCZHrqXSvEkXTorn4iCbw==qUnHnF2P6vJ7EDl5' }
   })
   catsData.value = await response.json()
-  setTimeout(() => (loading.value = false), 5000)
+  setTimeout(() => (loading.value = false), 2000)
 }
 
 const catInfo = (cat: CatData) => [
@@ -119,27 +120,6 @@ const catRatings = (cat: CatData) => [
 ]
 
 onMounted(fetchCatData)
-
-interface CatData {
-  name: string
-  image_link: string
-  origin: string
-  length: string
-  family_friendly: number
-  shedding: number
-  playfulness: number
-  general_health: number
-  children_friendly: number
-  stranger_friendly: number
-  grooming: number
-  meowing: number
-  intelligence: number
-  other_pets_friendly: number
-  min_weight: number
-  max_weight: number
-  min_life_expectancy: number
-  max_life_expectancy: number
-}
 </script>
 
 <style>

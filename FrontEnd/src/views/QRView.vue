@@ -94,15 +94,9 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import TemplateQR from '@/image/TemplateQR.jpg'
+import type { Bank } from '@/stores/type'
 
 const { t } = useI18n()
-
-interface Bank {
-  name: string
-  code: string
-  shortName: string
-  logo: string
-}
 
 const banks = ref<Bank[]>([])
 const image = ref('')

@@ -8,7 +8,7 @@
 
       <v-card-text>
         <span class="text-h6">{{ t('author') }}:</span>
-        <span class="font-weight-light text-h6 ml-4"> {{ quoteData.author }}</span>
+        <span class="font-weight-light text-h6 ml-4">{{ quoteData.author }}</span>
       </v-card-text>
 
       <v-card-text>
@@ -29,10 +29,15 @@
     </v-card>
 
     <v-row justify="center" class="mt-2 mb-4">
-      <v-btn @click="GetQuote" color="secondary" rounded="lg">
+      <v-btn @click="fetchNewQuote" :loading="loading" color="secondary" rounded="lg">
         <p class="text-h5 font-weight-bold">{{ t('randomQuote') }}</p>
       </v-btn>
     </v-row>
+
+    <!-- Loading Indicator -->
+    <v-overlay :value="loading" absolute>
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </v-overlay>
   </v-card>
 </template>
 
@@ -41,11 +46,25 @@ import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 
+// Setup i18n
 const { t } = useI18n()
 
-const ApiKey = 'zyCZHrqXSvEkXTorn4iCbw==qUnHnF2P6vJ7EDl5'
-const quoteData = ref({ author: '', category: '', quote: '', translatedQuote: '' })
+// Configuration
+const API_KEY = 'zyCZHrqXSvEkXTorn4iCbw==qUnHnF2P6vJ7EDl5'
+const QUOTE_API_URL = 'https://api.api-ninjas.com/v1/quotes'
+const TRANSLATE_API_URL = 'https://api.mymemory.translated.net/get'
 
+// Reactive state
+const quoteData = ref({
+  author: '',
+  category: '',
+  quote: '',
+  translatedQuote: ''
+})
+
+const loading = ref(false) // Loading state
+
+// List of categories
 const randomCategories = [
   'age',
   'amazing',
@@ -91,19 +110,28 @@ const randomCategories = [
   'success'
 ]
 
+// Get a random category
 const getRandomCategory = () =>
   randomCategories[Math.floor(Math.random() * randomCategories.length)]
 
+// Fetch a quote from API
 const fetchQuote = async (category: string) => {
-  const response = await fetch(`https://api.api-ninjas.com/v1/quotes?category=${category}`, {
-    headers: { 'X-Api-Key': ApiKey }
-  })
-  return response.json()
+  try {
+    const response = await fetch(`${QUOTE_API_URL}?category=${category}`, {
+      headers: { 'X-Api-Key': API_KEY }
+    })
+    if (!response.ok) throw new Error('Network response was not ok')
+    return response.json()
+  } catch (error) {
+    console.error('Fetch error:', error)
+    return []
+  }
 }
 
+// Translate a quote
 const translateQuote = async (text: string) => {
   try {
-    const response = await axios.get('https://api.mymemory.translated.net/get', {
+    const response = await axios.get(TRANSLATE_API_URL, {
       params: { q: text, langpair: 'en|vi' }
     })
     return response.data.responseData.translatedText
@@ -113,16 +141,30 @@ const translateQuote = async (text: string) => {
   }
 }
 
-const GetQuote = async () => {
-  const data = await fetchQuote(getRandomCategory())
-  if (data && data.length > 0) {
-    const { author, category, quote } = data[0]
-    quoteData.value.author = author
-    quoteData.value.category = category
-    quoteData.value.quote = quote
-    quoteData.value.translatedQuote = await translateQuote(quote)
+// Fetch and update quote data
+const fetchNewQuote = async () => {
+  loading.value = true // Set loading to true
+  try {
+    const category = getRandomCategory()
+    const data = await fetchQuote(category)
+    if (data.length > 0) {
+      const { author, category, quote } = data[0]
+      quoteData.value = {
+        author,
+        category,
+        quote,
+        translatedQuote: await translateQuote(quote)
+      }
+    }
+  } finally {
+    loading.value = false // Ensure loading is set to false after completion
   }
 }
 
-onMounted(GetQuote)
+// Fetch a quote on component mount
+onMounted(fetchNewQuote)
 </script>
+
+<style scoped>
+/* Scoped styles if needed */
+</style>

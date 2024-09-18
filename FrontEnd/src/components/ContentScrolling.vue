@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute h-24 bg-gray-700 mb-2 border-b-2 border-black">
+  <div class="absolute h-24 mb-2">
     <div class="marquee">
       <div
         v-for="fact in currentFact"

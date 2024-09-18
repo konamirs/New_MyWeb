@@ -10,45 +10,59 @@
         >
         </v-list-item>
 
-        <v-list-item title="Quote" value="quote" @click="changeHome">
+        <v-list-item value="quote" @click="changeHome">
+          <v-list-item-title>{{ t('Quote') }}</v-list-item-title>
           <template v-slot:prepend>
             <v-icon>
               <Quote :size="32" />
             </v-icon>
           </template>
         </v-list-item>
-        <v-list-item title="Cat" value="cat" @click="changeCat">
+        <v-list-item value="cat" @click="changeCat">
+          <v-list-item-title>{{ t('Cat') }}</v-list-item-title>
           <template v-slot:prepend>
             <v-icon>
               <Cat :size="32" />
             </v-icon>
           </template>
         </v-list-item>
-        <v-list-item title="Countdown to holiday" value="holiday" @click="changeHoliday">
-          <template v-slot:prepend>
+        <v-list-item value="holiday" @click="changeHoliday">
+          <v-list-item-title>{{ t('Countdown to holiday') }}</v-list-item-title>
+                    <template v-slot:prepend>
             <v-icon>
               <CalendarClock :size="32" />
             </v-icon>
           </template>
         </v-list-item>
-        <v-list-item title="Emoji" value="emoji" @click="changeEmoji">
+        <v-list-item value="emoji" @click="changeEmoji">
+          <v-list-item-title>{{ t('Emoji') }}</v-list-item-title>
           <template v-slot:prepend>
             <v-icon>
               <Smile :size="32" />
             </v-icon>
           </template>
         </v-list-item>
-        <v-list-item title="Translate" value="translate" @click="changeTranslate">
+        <v-list-item value="translate" @click="changeTranslate">
+          <v-list-item-title>{{ t('Translate') }}</v-list-item-title>
           <template v-slot:prepend>
             <v-icon>
               <Languages :size="32" />
             </v-icon>
           </template>
         </v-list-item>
-        <v-list-item title="Generate QR" value="qr" @click="changeQr">
+        <v-list-item value="qr" @click="changeQr">
+          <v-list-item-title>{{ t('Generate QR') }}</v-list-item-title>
           <template v-slot:prepend>
             <v-icon>
               <QrCode :size="32" />
+            </v-icon>
+          </template>
+        </v-list-item>
+        <v-list-item value="weather" @click="changeWeather">
+          <v-list-item-title>{{ t('Weather') }}</v-list-item-title>
+          <template v-slot:prepend>
+            <v-icon>
+              <CloudSun :size="32" />
             </v-icon>
           </template>
         </v-list-item>
@@ -62,10 +76,13 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarClock, Languages, Quote, Smile, Cat, QrCode } from 'lucide-vue-next'
+import { CalendarClock, Languages, Quote, Smile, Cat, QrCode, CloudSun } from 'lucide-vue-next'
 import AppNav from './components/AppNav.vue'
 import { useRouter } from 'vue-router'
 import { useTheme } from 'vuetify/lib/framework.mjs'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const router = useRouter()
 const changeHome = () => router.push('/')
@@ -74,6 +91,7 @@ const changeEmoji = () => router.push('/emoji')
 const changeHoliday = () => router.push('/holiday')
 const changeTranslate = () => router.push('/translate')
 const changeQr = () => router.push('/vietqr')
+const changeWeather = () => router.push('/weather')
 </script>
 
 <style scoped>

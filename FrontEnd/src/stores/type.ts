@@ -31,3 +31,52 @@ export interface Bank {
   shortName: string
   logo: string
 }
+
+export interface WeatherCondition {
+  icon: string
+  text: string
+}
+
+export interface WeatherDay {
+  date: string
+  day: {
+    condition: WeatherCondition
+    maxtemp_c: number
+    mintemp_c: number
+  }
+}
+
+export interface Place {
+  location: {
+    name: string
+    localtime: string
+  }
+  current: {
+    is_day: number
+    condition: WeatherCondition
+    temp_c: number
+    wind_kph: number
+    humidity: number
+    precip_mm: number
+    wind_dir: string
+    feelslike_c: number
+    uv: number
+    last_updated: string
+  }
+  forecast: {
+    forecastday: WeatherDay[]
+  }
+}
+
+export interface SimplePlace {
+  id: string
+  name: string
+  region: string
+  country: string
+}
+
+export interface SearchTerm {
+  query: string
+  timeout: number | null
+  results: SimplePlace[] | null
+}

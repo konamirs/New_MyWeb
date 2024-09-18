@@ -1,5 +1,20 @@
 <template>
   <div>
+    <v-row justify="center" class="text-h5 mt-3">
+      <v-col class="text-center">
+        <span class="display-1">
+          {{
+            new Date().toLocaleDateString('vi-vn', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })
+          }}
+        </span>
+      </v-col>
+    </v-row>
+
     <v-text-field
       v-model="searchText"
       @input="fetchCatData"
@@ -12,7 +27,7 @@
       class="w-25 ml-8 my-16"
     />
 
-    <v-row v-if="catsData.length" class="mb-6 mx-5 justify-center" no-gutters>
+    <v-row v-if="catsData.length" class="mb-6 mx-5 justify-start" no-gutters>
       <v-col v-for="(cat, index) in catsData" :key="index" cols="3" class="mb-6">
         <v-skeleton-loader
           :loading="loading"
@@ -21,10 +36,10 @@
           type="card, sentences,sentences,sentences,sentences,sentences,sentences, sentences"
           class="mx-2"
         >
-          <v-card class="rounded-lg" :min-height="1097" :elevation="5">
+          <v-card class="rounded-lg" :min-height="1097" :width="480" :elevation="5">
             <v-img height="189" cover aspect-ratio="16/9" :src="cat.image_link">
               <template v-slot:placeholder>
-                <v-row align="center" class="fill-height ma-0" justify="center">
+                <v-row class="fill-height ma-0">
                   <v-progress-circular color="grey-lighten-5" indeterminate />
                 </v-row>
               </template>

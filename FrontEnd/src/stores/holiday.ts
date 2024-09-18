@@ -27,10 +27,11 @@ export const useHolidayStore = defineStore('holiday', {
           country: 'VN',
           language: 'VI',
           year: currentYear,
-          apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
+          apiKey: ''
         }
       })
       const data1 = await response1.data
+      //l41ujr2bmhgc1mnt19nsqgm9989tjotpg1n4hffvd17og0anovotc7o
 
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -40,7 +41,7 @@ export const useHolidayStore = defineStore('holiday', {
           country: 'VN',
           language: 'VI',
           year: nextYear,
-          apiKey: 'rp8s5lc29e7neav2lav7o2q7fbqg7qboqh6bfvhtu1gnl4j9vom5to'
+          apiKey: ''
         }
       })
       const data2 = await response2.data

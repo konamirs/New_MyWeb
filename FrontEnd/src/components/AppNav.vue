@@ -20,7 +20,7 @@
     <v-btn @click="toggleTheme" icon><v-icon>mdi-theme-light-dark</v-icon></v-btn>
 
     <v-btn icon>
-      <div @click="toggleLanguage">{{ locale === 'en' ? 'EN' : 'VN' }}</div>
+      <div @click="toggleLanguage">{{ locale === 'en' ? 'EN' : 'VI' }}</div>
     </v-btn>
 
     <v-btn icon>
@@ -35,7 +35,7 @@ import { useTheme } from 'vuetify'
 import { House } from 'lucide-vue-next'
 import ContentScrolling from './ContentScrolling.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useScroll } from './useScroll'
+import { useScroll } from './useScroll.ts'
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 

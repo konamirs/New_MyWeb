@@ -1,4 +1,19 @@
 <template>
+  <v-row justify="center" class="text-h5 mt-3">
+      <v-col class="text-center">
+        <span class="display-1">
+          {{
+            new Date().toLocaleDateString('vi-vn', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })
+          }}
+        </span>
+      </v-col>
+    </v-row>
+    
   <v-row no-gutters>
     <v-col>
       <v-card class="pa-6 mt-7 mx-12 rounded-xl" :elevation="5">

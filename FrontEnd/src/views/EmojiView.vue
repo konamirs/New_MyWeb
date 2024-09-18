@@ -1,5 +1,20 @@
 <template>
   <div>
+    <v-row justify="center" class="text-h5 mt-3">
+      <v-col class="text-center">
+        <span class="display-1">
+          {{
+            new Date().toLocaleDateString('vi-vn', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })
+          }}
+        </span>
+      </v-col>
+    </v-row>
+    
     <v-text-field
       v-model="searchText"
       @input="debouncedGetEmojiData"

@@ -7,7 +7,7 @@
 
     <v-col cols="3">
       <!-- Icon -->
-      <v-img :src="day.day.condition.icon" alt="icon" max-width="40" />
+      <v-img :src="day.day.condition.icon" alt="icon" max-width="30" />
     </v-col>
 
     <v-col cols="4" class="text-end">

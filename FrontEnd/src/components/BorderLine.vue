@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- border -->
-    <div class="border-gradient my-10"></div>
+    <div class="border-gradient"></div>
   </v-container>
 </template>
 

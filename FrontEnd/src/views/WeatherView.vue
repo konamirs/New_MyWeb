@@ -1,32 +1,34 @@
 <template>
   <v-container>
     <!-- Date -->
-    <v-row justify="center" class="text-h5">
+    <v-row justify="center" class="text-h5 mt-1">
       <v-col class="text-center">
-        <span class="display-1">
-          {{
-            new Date().toLocaleDateString('vi-vn', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })
-          }}
-        </span>
+        {{
+          new Date().toLocaleDateString('vi-vn', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })
+        }}
       </v-col>
     </v-row>
 
     <!-- Search -->
-    <v-row class="my-4">
-      <v-col cols="12">
+    <v-row>
+      <v-col>
         <search-input @place-data="addPlace" />
       </v-col>
     </v-row>
 
     <!-- Weather cards -->
-    <v-row>
+    <v-row v-if="places.length === 1">
+      <weather-card :place="places[0]" @delete-place="deletePlace" :width="500" class="mx-auto" />
+    </v-row>
+
+    <v-row v-else>
       <v-col v-for="(place, idx) in places" :key="idx" cols="12" md="6">
-        <weather-card :place="place" @delete-place="deletePlace" />
+        <weather-card :place="place" @delete-place="deletePlace" :width="500" />
       </v-col>
     </v-row>
   </v-container>

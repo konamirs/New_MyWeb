@@ -6,14 +6,13 @@
         v-model="searchTerm.query"
         label="Search for a place"
         prepend-inner-icon="mdi-magnify"
-        class="mb-2"
         outlined
         @input="handleSearch"
       ></v-text-field>
     </v-form>
 
     <!-- Search suggestions -->
-    <v-card v-if="searchTerm.results && searchTerm.results.length" class="mt-2">
+    <v-card v-if="searchTerm.results && searchTerm.results.length">
       <v-list>
         <v-list-item-group
           v-for="place in searchTerm.results"
@@ -21,7 +20,7 @@
           @click="() => getWeather(place.id)"
           class="cursor-pointer"
         >
-          <v-list-item variant="plain" class="text-blue-darken-1">
+          <v-list-item variant="plain" :elevation="2">
             <v-list-item-content>
               <v-list-item-title>
                 {{ place.name }}, {{ place.region }}, {{ place.country }}

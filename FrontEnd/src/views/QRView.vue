@@ -1,22 +1,18 @@
 <template>
-  <v-row justify="center" class="text-h5 mt-3">
-      <v-col class="text-center">
-        <span class="display-1">
-          {{
-            new Date().toLocaleDateString('vi-vn', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })
-          }}
-        </span>
-      </v-col>
-    </v-row>
-    
+  <div justify="center" class="text-h5 text-center mt-1">
+    {{
+      new Date().toLocaleDateString('vi-vn', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    }}
+  </div>
+
   <v-row no-gutters>
     <v-col>
-      <v-card class="pa-6 mt-7 mx-12 rounded-xl" :elevation="5">
+      <v-card class="pa-6 mt-2 mx-12 rounded-xl" :elevation="5">
         <v-form ref="form" @submit.prevent="getQr">
           <v-sheet class="mb-3">{{ t('Account Number') }}</v-sheet>
           <v-text-field
@@ -96,7 +92,7 @@
     </v-col>
     <v-col>
       <v-img
-        class="mt-8 mx-auto border-md rounded-xl"
+        class="mt-4 mx-auto border-md rounded-xl"
         :max-height="575"
         :max-width="445"
         :src="image"

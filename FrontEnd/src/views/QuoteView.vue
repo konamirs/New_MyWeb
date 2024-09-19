@@ -1,20 +1,16 @@
 <template>
-  <v-row justify="center" class="text-h5 mt-3">
-      <v-col class="text-center">
-        <span class="display-1">
-          {{
-            new Date().toLocaleDateString('vi-vn', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })
-          }}
-        </span>
-      </v-col>
-    </v-row>
-    
-  <v-card class="mx-auto w-screen mt-16" width="600">
+  <div justify="center" class="text-h5 mt-6 text-center">
+    {{
+      new Date().toLocaleDateString('vi-vn', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    }}
+  </div>
+
+  <v-card class="mx-auto w-screen mt-14" width="600">
     <v-card class="mx-3 my-3" color="secondary">
       <v-card-text>
         <p class="text-h6">{{ t('quote') }}:</p>

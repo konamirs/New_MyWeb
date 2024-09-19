@@ -24,7 +24,7 @@
       variant="solo-filled"
       hide-details
       single-line
-      class="w-25 ml-8 my-16"
+      class="w-25 ml-8 my-8 max-h-1"
     />
 
     <v-row v-if="catsData.length" class="mb-6 mx-5 justify-start" no-gutters>

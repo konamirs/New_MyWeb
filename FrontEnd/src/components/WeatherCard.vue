@@ -20,7 +20,7 @@
     </v-row>
 
     <!-- Current weather -->
-    <v-row class="text-center">
+    <v-row class="text-center mb-2">
       <v-col>
         <v-img
           :src="place.current.condition.icon"
@@ -43,19 +43,16 @@
     </div>
 
     <!-- Info -->
-    <Transition name="fade">
-      <v-dialog v-model="showDetail" max-width="600">
-        <WeatherInfo
-          :place="place"
-          @close-info="showDetail = false"
-          @remove-place="removePlace(place.location.name)"
-        />
-      </v-dialog>
-    </Transition>
-
+    <v-dialog v-model="showDetail" max-width="600">
+      <WeatherInfo
+        :place="place"
+        @close-info="showDetail = false"
+        @remove-place="removePlace(place.location.name)"
+      />
+    </v-dialog>
     <!-- Forecast btn -->
-    <v-row class="mt-10">
-      <v-col class="d-flex justify-end">
+    <v-row>
+      <v-col class="d-flex justify-end mt-2">
         <v-btn @click="showDetail = true" color="primary">
           More <v-icon right>mdi-arrow-right</v-icon>
         </v-btn>

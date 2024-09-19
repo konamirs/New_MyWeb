@@ -1,20 +1,16 @@
 <template>
   <div>
-    <v-row justify="center" class="text-h5 mt-3">
-      <v-col class="text-center">
-        <span class="display-1">
-          {{
-            new Date().toLocaleDateString('vi-vn', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })
-          }}
-        </span>
-      </v-col>
-    </v-row>
-    
+    <div justify="center" class="text-h5 mt-6 text-center">
+      {{
+        new Date().toLocaleDateString('vi-vn', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })
+      }}
+    </div>
+
     <v-text-field
       v-model="searchText"
       @input="debouncedGetEmojiData"
@@ -24,7 +20,7 @@
       variant="solo-filled"
       hide-details
       single-line
-      class="w-25 ml-8 my-16 max-h-1"
+      class="w-25 ml-8 my-8 max-h-1"
     ></v-text-field>
   </div>
 
@@ -64,6 +60,7 @@
       icon="mdi-magnify"
       text="Try adjusting your search terms or filters. Sometimes less specific terms or broader queries can help you find what you're looking for."
       title="We couldn't find a match."
+      class="mt-13"
     ></v-empty-state>
   </div>
 </template>

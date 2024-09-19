@@ -1,19 +1,15 @@
 <template>
-  <v-row justify="center" class="text-h5 mt-3">
-      <v-col class="text-center">
-        <span class="display-1">
-          {{
-            new Date().toLocaleDateString('vi-vn', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })
-          }}
-        </span>
-      </v-col>
-    </v-row>
-    
+  <div justify="center" class="text-h5 mt-6 text-center">
+    {{
+      new Date().toLocaleDateString('vi-vn', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    }}
+  </div>
+
   <v-card class="mx-auto w-screen mt-16" width="600" :elevation="8">
     <v-container>
       <v-select
@@ -139,6 +135,7 @@ watch(
 onMounted(async () => {
   if (!holidayStore.hasFetchedHolidays) {
     await holidayStore.fetchHolidays()
+    console.log(holidayStore.holidays)
     holidayStore.hasFetchedHolidays = true
 
     // If there are holidays available, set the default selectedHoliday
